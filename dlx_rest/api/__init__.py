@@ -438,12 +438,47 @@ class RecordFieldPlaceSubfieldList(Resource):
     @ns.doc(description='Update the Field Instance in the Record with the given record identifier', security='basic')
     @login_required
     def put(self, collection, record_id, field_tag, field_place):
-        return jsonify({'Updated':'True'})
+        try:
+            cls = ClassDispatch.by_collection(collection)
+        except KeyError:
+            abort(404)
+        pass
+
+        # This is probably replacing the record?
+        try:
+            jmarc = json.loads(request.data)
+            result = cls(jmarc).commit()
+        except:
+            abort(400, 'Invalid JMARC')
+        
+        if result.acknowledged:
+            return Response(status=200)
+        else:
+            abort(500)
 
     @ns.doc(description='Delete the Field Instance in the Record with the given record identifier', security='basic')
     @login_required
     def delete(self, collection, record_id, field_tag, field_place):
-        return jsonify({'Deleted':'True'})
+        try:
+            cls = ClassDispatch.by_collection(collection)
+        except KeyError:
+            abort(404)
+    
+        user = 'testing@{}'.format(datetime.now()) if current_user.is_anonymous else current_user.email
+        
+        record = cls.match_id(record_id) or abort(404)
+        try:
+            result = record.delete_field(field_tag)
+            return Response(status=200)
+        except:
+            abort(500)
+        
+        '''
+        if result.acknowledged:
+            return Response(status=200)
+        else:
+            abort(500)
+        '''
 
 @ns.route('/<string:collection>/<int:record_id>/fields/<string:field_tag>/<int:field_place>/<string:subfield_code>')
 @ns.param('subfield_code', 'The subfield code')

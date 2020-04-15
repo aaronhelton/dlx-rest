@@ -143,7 +143,7 @@ def test_create_record(client, records):
     data = {"245": [{"indicators": [" ", " "], "subfields": [{"code": "a", "value": "A new record"}]}]}    
     response = client.post(PRE+'/bibs', headers={}, data=json.dumps(data))
     assert response.status_code == 200
-    assert client.get(PRE+'/bibs/51').status_code == 200
+    assert client.get(PRE+'/bibs/1').status_code == 200
 
 def test_delete_record(client, records):
     assert client.delete(PRE+'/bibs/1').status_code == 200
@@ -167,12 +167,13 @@ def test_create_record_field(client, records):
     response = client.post(PRE+'/bibs/1/fields/245', headers={}, data=json.dumps(data))
     assert response.status_code == 400
     
-    data = {"245": [{"indicators": [" ", " "], "subfields": [{"code": "a", "value": "A new record"}]}]}    
+    data = {"245": [{"indicators": [" ", " "], "subfields": [{"code": "a", "value": "A new title"}]}]}    
     response = client.post(PRE+'/bibs/1/fields/245', headers={}, data=json.dumps(data))
     assert response.status_code == 200
     assert client.get(PRE+'/bibs/51').status_code == 200
 
 def test_delete_record_field(client, records):
+    print(client.get(PRE+'/bibs/1/fields/245/0').data)
     assert client.delete(PRE+'/bibs/1/fields/245/0').status_code == 200
     assert client.get(PRE+'/bibs/1/fields/245/0').status_code == 404
 
@@ -183,6 +184,7 @@ def test_update_record_field(client, records):
 
     data = {"_id": 1, "245": [{"indicators": [" ", " "], "subfields": [{"code": "a", "value": "An updated title"}]}]}    
     response = client.put(PRE+'/bibs/1/fields/245/0', headers={}, data=json.dumps(data))
+    print(response)
     assert response.status_code == 200
     
     data = json.loads(client.get(PRE+'/bibs/1/fields/245/0/a/0').data)
