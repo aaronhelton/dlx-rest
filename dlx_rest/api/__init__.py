@@ -395,6 +395,11 @@ class RecordFieldPlaceList(Resource):
 
         return response.json()
 
+    @ns.doc(description='Create a new Field or Field Instance in the Record with the given record identifier', security='basic')
+    @login_required
+    def post(self, collection, record_id, field_tag):
+        return jsonify({'Created':'True'})
+
 @ns.route('/<string:collection>/<int:record_id>/fields/<string:field_tag>/<int:field_place>')
 @ns.param('field_place', 'The incidence number of the field in the record, starting with 0')
 @ns.param('field_tag', 'The MARC tag identifying the field')
@@ -429,6 +434,16 @@ class RecordFieldPlaceSubfieldList(Resource):
         )
 
         return response.json()
+
+    @ns.doc(description='Update the Field Instance in the Record with the given record identifier', security='basic')
+    @login_required
+    def put(self, collection, record_id, field_tag, field_place):
+        return jsonify({'Updated':'True'})
+
+    @ns.doc(description='Delete the Field Instance in the Record with the given record identifier', security='basic')
+    @login_required
+    def delete(self, collection, record_id, field_tag, field_place):
+        return jsonify({'Deleted':'True'})
 
 @ns.route('/<string:collection>/<int:record_id>/fields/<string:field_tag>/<int:field_place>/<string:subfield_code>')
 @ns.param('subfield_code', 'The subfield code')
