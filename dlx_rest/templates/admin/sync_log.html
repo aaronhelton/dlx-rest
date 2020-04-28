@@ -1,11 +1,12 @@
 {% extends 'admin/base.html' %} {% block admin %}
 <div class="container">
     <h3>Synchronizations to UNDL</h3>
-    <table class="table">
+    <table class="table sortable">
         <thead>
             <th>Time</th>
             <th>Record Type</th>
             <th>Record ID</th>
+            <th>Response Text</th>
             <th>Response Code</th>
             <th>XML</th>
         </thead>
@@ -14,7 +15,8 @@
             <tr>
                 <td>{{item.time}}</td>
                 <td>{{item.record_type}}</td>
-                <td>{{item.record_id}}</td>
+                <td><a href="{{url_for('get_record_by_id', coll=item.record_type + 's', id=item.record_id)}}">{{item.record_id}}</a></td>
+                <td>{{item.response_text}}</td>
                 <td>{{item.response_code}}</td>
                 <td>Show</td>
             </tr>
