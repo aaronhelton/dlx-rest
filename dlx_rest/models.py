@@ -48,6 +48,10 @@ class SyncLog(Document):
     response_code = IntField()
     response_text = StringField()
     xml = StringField()
+    callback_time = DateTimeField()
+    callback_response_url = StringField()
+    callback_response_success = StringField()
+    callback_response_xml = StringField()
 
     meta = {
         'collection': Config.sync_log_collection,
