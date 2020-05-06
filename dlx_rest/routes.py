@@ -100,6 +100,14 @@ def get_sync_log():
     items = SyncLog.objects().order_by('-time')
     return render_template('admin/sync_log.html', title="Sync Log", items=items)
 
+@app.route('/external_callback', methods=['POST'])
+def external_callback():
+    nonce = request.json['nonce']
+    results = request.json['results']
+
+    return jsonify({'nonce':nonce, 'results': results})
+
+
 '''
 @app.route('/admin/_sync')
 @login_required
