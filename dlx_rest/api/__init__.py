@@ -600,3 +600,6 @@ class Record(Resource):
             abort(500)
         
         
+# files is a special collection and doesn't use MARC by itself
+#@ns.route('/files')
+#@ns.param()

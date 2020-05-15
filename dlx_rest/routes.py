@@ -205,3 +205,8 @@ def create_record(coll):
 def edit_record_by_id(coll, id):
     pass
 '''
+
+@app.route('/collect')
+@login_required
+def collect_files():
+    return render_template('collect.html')
